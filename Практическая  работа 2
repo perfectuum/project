@@ -576,7 +576,6 @@ def uroven_3():
     print_slow("Молодой охранник смотрит на вас подозрительно.")
 
     est_dokumenty = "документы" in inventar
-    est_forma = "форма охранника" in inventar
 
     if est_dokumenty:
         print()
@@ -610,7 +609,7 @@ def epilog():
 
     if "отмычки" in inventar:
         print_slow(f"Прошло три месяца. {imya_igroka} ({klichka_igroka}) стоял у ворот особняка Артёма.")
-        print()
+        print() 
         print_slow("С документами, вы доказали свою невиновность.")
         print_slow("Вас полностью оправдали. Вы вернули себе имя и восстановили репутацию.")
         print_slow("«Арасака» снова под вашим управлением.")
