@@ -1,0 +1,98 @@
+import random
+import os
+
+if not os.path.exists("stats"):
+    os.makedirs("stats")
+
+stats_file = open("stats/game_stats.txt", "a", encoding="utf-8")
+
+while True:
+    razmer = 0
+    while razmer < 3 or razmer > 9:
+        try:
+            razmer = int(input("Введите размер поля (от 3 до 9): "))
+            if razmer < 3 or razmer > 9:
+                print("Размер должен быть от 3 до 9. Попробуйте снова.")
+        except ValueError:
+            print("Нужно ввести число! Попробуйте снова.")
+
+    pole = []
+    for i in range(razmer):
+        ryad = []
+        for j in range(razmer):
+            ryad.append(".")
+        pole.append(ryad)
+
+    if random.randint(0, 1) == 0:
+        tekushchiy_igrok = "X"
+    else:
+        tekushchiy_igrok = "O"
+
+    igra_okonchena = False
+
+    while not igra_okonchena:
+        # Вывод поля с координатами
+        print("  " + " ".join(str(i + 1) for i in range(razmer)))
+        for i in range(razmer):
+            print(f"{i + 1} " + " ".join(pole[i]))
+
+        while True:
+            hod = input(f"Ход игрока {tekushchiy_igrok}. Введите строку и столбец (например: 2 3): ").split()
+            if len(hod) != 2:
+                print("Неправильный ввод. Нужно два числа через пробел.")
+                continue
+            try:
+                stroka = int(hod[0]) - 1
+                stolbets = int(hod[1]) - 1
+                if stroka < 0 or stroka >= razmer or stolbets < 0 or stolbets >= razmer:
+                    print("Клетка вне поля. Попробуйте снова.")
+                elif pole[stroka][stolbets] != ".":
+                    print("Эта клетка уже занята. Выберите другую.")
+                else:
+                    pole[stroka][stolbets] = tekushchiy_igrok
+                    break
+            except ValueError:
+                print("Нужно ввести два числа! Попробуйте снова.")
+
+        pobeda = False
+
+        # Проверка строк
+        for i in range(razmer):
+            if all(kletka == tekushchiy_igrok for kletka in pole[i]):
+                pobeda = True
+
+        # Проверка столбцов
+        for j in range(razmer):
+            if all(pole[i][j] == tekushchiy_igrok for i in range(razmer)):
+                pobeda = True
+
+        # Главная диагональ
+        if all(pole[i][i] == tekushchiy_igrok for i in range(razmer)):
+            pobeda = True
+
+        # Побочная диагональ
+        if all(pole[i][razmer - 1 - i] == tekushchiy_igrok for i in range(razmer)):
+            pobeda = True
+
+        if pobeda:
+            print(f"Игрок {tekushchiy_igrok} победил!")
+            stats_file.write(f"Победил: {tekushchiy_igrok}, Размер поля: {razmer}\n")
+            igra_okonchena = True
+        elif all("." not in ryad for ryad in pole):
+            print("Ничья!")
+            stats_file.write(f"Ничья, Размер поля: {razmer}\n")
+            igra_okonchena = True
+        else:
+            if tekushchiy_igrok == "X":
+                tekushchiy_igrok = "O"
+            else:
+                tekushchiy_igrok = "X"
+
+    while True:
+        eshche = input("Хотите сыграть ещё раз? (да/нет): ").strip().lower()
+        if eshche in ["да", "нет"]:
+            break
+        else:
+            print("Ошибка, введите 'да' или 'нет'.")
+
+stats_file.close()
