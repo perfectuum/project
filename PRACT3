@@ -78,16 +78,17 @@ while True:
             stats_file.write(f"Ничья, Размер поля: {razmer}\n")
             igra_okonchena = True
         else:
-            if tekushchiy_igrok == "X":
-                tekushchiy_igrok = "O"
-            else:
-                tekushchiy_igrok = "X"
+            tekushchiy_igrok = "O" if tekushchiy_igrok == "X" else "X"
 
     while True:
         eshche = input("Хотите сыграть ещё раз? (да/нет): ").strip().lower()
-        if eshche in ["да", "нет"]:
+        if eshche in ("да", "нет"):
             break
         else:
             print("Ошибка, введите 'да' или 'нет'.")
+
+    if eshche == "нет":
+        print("Спасибо за игру!")
+        break
 
 stats_file.close()
