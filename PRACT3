@@ -31,7 +31,6 @@ while True:
     igra_okonchena = False
 
     while not igra_okonchena:
-        # Вывод поля с координатами
         print("  " + " ".join(str(i + 1) for i in range(razmer)))
         for i in range(razmer):
             print(f"{i + 1} " + " ".join(pole[i]))
@@ -52,25 +51,21 @@ while True:
                     pole[stroka][stolbets] = tekushchiy_igrok
                     break
             except ValueError:
-                print("Нужно ввести два числа! Попробуйте снова.")
+                print("Нужно ввести два числа. Введите снова.")
 
         pobeda = False
 
-        # Проверка строк
         for i in range(razmer):
             if all(kletka == tekushchiy_igrok for kletka in pole[i]):
                 pobeda = True
 
-        # Проверка столбцов
         for j in range(razmer):
             if all(pole[i][j] == tekushchiy_igrok for i in range(razmer)):
                 pobeda = True
 
-        # Главная диагональ
         if all(pole[i][i] == tekushchiy_igrok for i in range(razmer)):
             pobeda = True
 
-        # Побочная диагональ
         if all(pole[i][razmer - 1 - i] == tekushchiy_igrok for i in range(razmer)):
             pobeda = True
 
