@@ -1,0 +1,119 @@
+import 'dart:io';
+import 'dart:math';
+
+import 'package:untitled24/untitled24.dart' as untitled24;
+
+void main(List<String> arguments) {
+  while (true) {
+    try
+    {
+      var message = """ 
+Операции:
+1. + Сложение
+2. - Вычитание
+3. * Умножение
+4. / Деление
+5. ~/ Целочисленное деление
+6. % Остаток от деления
+7. pow() Возведение в степень   
+8. == Равно
+9. != Не равно
+10. > Больше
+11. < Меньше
+12. >= Больше или равно
+13. <= Меньше или равно
+14. && Логическое И
+15. || Логическое ИЛИ
+16. ! Логическое НЕ
+17. Выход
+""";
+      print(message);
+      print("Введите первое число: ");
+      var number1 = double.parse(stdin.readLineSync()!);
+      print("Введите второе число: ");
+      var number2 = double.parse(stdin.readLineSync()!);
+      print("Выберите операцию: ");
+      var choice = double.parse(stdin.readLineSync()!);
+
+      if (choice == 1)
+        {
+          print("Ответ ${number1 + number2}");
+        }
+      else if (choice == 2)
+        {
+          print("Ответ: ${number1 - number2}");
+        }
+      else if (choice == 3)
+        {
+          print("Ответ: ${number1 * number2}");
+        }
+      else if (choice == 4)
+        {
+          print("Ответ: ${number1 / number2}");
+        }
+      else if  (choice == 5)
+      {
+        print("Ответ: ${number1 ~/ number2}");
+      }
+      else if (choice == 6)
+        {
+          print("Ответ: ${number1 % number2}");
+        }
+      else if (choice == 7)
+      {
+        print("Первое число: ${pow(number1, 2)}");
+        print("Второе число: ${pow(number2, 2)}");
+      }
+      else if (choice == 8)
+      {
+        print("Ответ: ${number1 == number2}");
+      }
+      else if (choice == 9)
+      {
+        print("Ответ: ${number1 != number2}");
+      }
+      else if (choice == 10)
+      {
+        print("Ответ: ${number1 > number2}");
+      }
+      else if (choice == 11)
+      {
+        print("Ответ: ${number1 < number2}");
+      }
+      else if (choice == 12)
+      {
+        print("Ответ: ${number1 >= number2}");
+      }
+      else if (choice == 13)
+      {
+        print("Ответ: ${number1 <= number2}");
+      }
+      else if (choice == 14)
+      {
+        print("Ответ: ${number1 > 0 && number2 > 0}");
+      }
+      else if (choice == 15)
+      {
+        print("Ответ: ${number1 > 0 || number2 > 0}");
+      }
+      else if (choice == 16)
+      {
+        print("Ответ: ${!(number1 > 0 || number2 > 0)}");
+      }
+      else if (choice == 17)
+      {
+       print("Удачи на дорогах!");
+       break;
+      }
+        }
+    catch (e)
+  {
+    print("Ошибка, повторите ввод");
+  }
+
+    }
+}
+
+
+
+
