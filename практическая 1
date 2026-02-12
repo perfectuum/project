@@ -1,117 +1,67 @@
-import 'dart:io';
-import 'dart:math';
+const users = [
+    { id: 1, name: "Anna", age: 22, city: "Moscow", isActive: true },
+    { id: 2, name: "Oleg", age: 17, city: "Kazan", isActive: false },
+    { id: 3, name: "Ivan", age: 30, city: "Moscow", isActive: true },
+    { id: 4, name: "Maria", age: 25, city: "Sochi", isActive: false }
+];
 
-import 'package:untitled24/untitled24.dart' as untitled24;
 
-void main(List<String> arguments) {
-  while (true) {
-    try
-    {
-      var message = """ 
-Операции:
-1. + Сложение
-2. - Вычитание
-3. * Умножение
-4. / Деление
-5. ~/ Целочисленное деление
-6. % Остаток от деления
-7. pow() Возведение в степень   
-8. == Равно
-9. != Не равно
-10. > Больше
-11. < Меньше
-12. >= Больше или равно
-13. <= Меньше или равно
-14. && Логическое И
-15. || Логическое ИЛИ
-16. ! Логическое НЕ
-17. Выход
-""";
-      print(message);
-      print("Введите первое число: ");
-      var number1 = double.parse(stdin.readLineSync()!);
-      print("Введите второе число: ");
-      var number2 = double.parse(stdin.readLineSync()!);
-      print("Выберите операцию: ");
-      var choice = double.parse(stdin.readLineSync()!);
+function getActiveUsers(users) {
+    return users.filter(user => user.isActive);
+}
 
-      if (choice == 1)
-        {
-          print("Ответ ${number1 + number2}");
-        }
-      else if (choice == 2)
-        {
-          print("Ответ: ${number1 - number2}");
-        }
-      else if (choice == 3)
-        {
-          print("Ответ: ${number1 * number2}");
-        }
-      else if (choice == 4)
-        {
-          print("Ответ: ${number1 / number2}");
-        }
-      else if  (choice == 5)
-      {
-        print("Ответ: ${number1 ~/ number2}");
-      }
-      else if (choice == 6)
-        {
-          print("Ответ: ${number1 % number2}");
-        }
-      else if (choice == 7)
-      {
-        print("Первое число: ${pow(number1, 2)}");
-        print("Второе число: ${pow(number2, 2)}");
-      }
-      else if (choice == 8)
-      {
-        print("Ответ: ${number1 == number2}");
-      }
-      else if (choice == 9)
-      {
-        print("Ответ: ${number1 != number2}");
-      }
-      else if (choice == 10)
-      {
-        print("Ответ: ${number1 > number2}");
-      }
-      else if (choice == 11)
-      {
-        print("Ответ: ${number1 < number2}");
-      }
-      else if (choice == 12)
-      {
-        print("Ответ: ${number1 >= number2}");
-      }
-      else if (choice == 13)
-      {
-        print("Ответ: ${number1 <= number2}");
-      }
-      else if (choice == 14)
-      {
-        print("Ответ: ${number1 > 0 && number2 > 0}");
-      }
-      else if (choice == 15)
-      {
-        print("Ответ: ${number1 > 0 || number2 > 0}");
-      }
-      else if (choice == 16)
-      {
-        print("Ответ: ${!(number1 > 0 || number2 > 0)}");
-      }
-      else if (choice == 17)
-      {
-       print("Удачи на дорогах!");
-       break;
-      }
-        }
-    catch (e)
-  {
-    print("Ошибка, повторите ввод");
-  }
+const getUserNames = (users) => users.map(user => user.name);
 
+
+console.log(findUserById(users, 1));
+
+console.log(findUserById(users, 99));
+
+function findUserById(users, id) {
+
+    const foundUser = users.find(user => user.id === id);
+
+    if (foundUser) {
+        return foundUser;
+    } else {
+        return null;
     }
+
+}
+
+
+findUserById(users)
+
+function getUsersStatistics(users) {
+        const activeCount = users.filter(user => user.isActive).length;
+        const totalCount = users.length;
+        return {
+            total: totalCount,
+            active: activeCount,
+            inactive: totalCount - activeCount
+        };
+    }
+    console.log(getUsersStatistics(users));
+
+
+
+
+function getAverageAge(users) {
+    if (users.length === 0) return 0;
+    const totalAge = users.reduce((sum, user) => sum + user.age, 0);
+    return totalAge / users.length;
+}
+
+
+
+function groupUsersByCity(usersArray) {
+    return usersArray.reduce((result, user) => {
+        if (!result[user.city]) {
+            result[user.city] = [];
+        }
+        result[user.city].push(user);
+        return result;
+    }, {});
 }
 
 
