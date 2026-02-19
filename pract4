@@ -1,15 +1,122 @@
-import csv
 
-with open('csv_file.csv', 'r', encoding='utf-8') as f:
-    reader = csv.reader(f)
-    data = list(reader)
+const expenseTracker = {
 
-data[0].append('Зарплата')
+     expenses: [],
 
-data[1].append('120000')
-data[2].append('100000')
-data[3].append('90000')
 
-with open('employees_with_salary.csv', 'w', encoding='utf-8', newline='') as f:
-    writer = csv.writer(f)
-    writer.writerows(data)
+
+     addExpense(title, amount, category) {
+          if (!title || typeof amount !== 'number' || amount <= 0) {
+               console.log("Ошибка ввода: проверьте, что сумма — это число больше 0, а название не пустое.");
+               return;
+          }
+
+               const object = {
+                    id: Date.now(),
+                    title: title,
+                    amount: amount,
+                    category: category
+                    }
+
+          this.expenses.push(object)
+
+},
+     deleteExpense(id) {
+
+          if (typeof id !== 'number') {
+               console.log("Ошибка, повторите ввод.");
+               return;
+          }
+
+          const index = this.expenses.findIndex((item) => item.id === id);
+
+          if (index === -1) {
+               console.log(`Ошибка: Расход с ID ${id} не найден.`);
+               return;
+          }
+
+          this.expenses.splice(index, 1);
+          console.log(`Расход с id ${id} удален.`);
+     },
+     printCategoryStatistics() {
+          const stats = {};
+
+          this.expenses.forEach((stat) => {
+               if (stats[stat.category] === undefined) {
+                    stats[stat.category] = 0;
+               }
+
+               stats[stat.category] += stat.amount;
+          });
+
+
+          console.log("Статистика по категориям");
+          for (const key in stats) {
+               console.log(`${key}: ${stats[key]}`);
+          }
+     },
+
+
+     printAllExpenses() {
+          console.log("Список ваших расходов");
+          this.expenses.forEach((total) => {
+          console.log(`Название: ${total.title}, Сумма: ${total.amount}, Категория: ${total.category}`);
+     });
+
+     if (this.expenses.length === 0) {
+          console.log("Список пока пуст.");
+     }
+},
+
+
+     getTotalAmount() {
+     let total = 0;
+
+     for (let i = 0; i < this.expenses.length; i++) {
+          total = total + this.expenses[i].amount;
+     }
+
+     console.log(`Общая сумма всех расходов: ${total}`);
+     return total
+},
+
+     getExpensesByCategory(category) {
+          const list = this.expenses.filter((item) => {
+               return item.category === category;
+          });
+          let sum = 0;
+          list.forEach((item) => {
+               sum = sum + item.amount;
+          });
+          console.log(`На категорию ${category} вы потратили: ${sum}`);
+          return list;
+},
+
+     findExpenseByTitle(title) {
+     const result = this.expenses.find((each) => {
+          return each.title && each.title.includes(title);
+     });
+          if (result) {
+               console.log("Найдено:", result);
+          } else {
+               console.log("Ничего не найдено.");
+          }
+     while (true) {
+          try {
+               let stroka = prompt("Введите дополнительную строку: ");
+               this.expenses.push({ id: Date.now(), title: stroka, amount: 0, category: "Заметка" });
+               break
+
+          } catch (e) {
+               console.log("Ошибка, повторите ввод")
+          }
+     }
+
+
+     return result
+}
+
+
+}
+
+
