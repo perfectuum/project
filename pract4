@@ -1,182 +1,188 @@
+void main() {
+  List<String> students = [
+    'Шелудяков Максим',
+    'Хрусталёв Тимофей',
+    'Сушков Илья',
+    'Синегрибов Кирилл',
+    'Савченко Александр',
+    'Потехин Андрей',
+    'Попов Давид',
+  ];
 
-const expenseTracker = {
+  List<String> predmets = [
+    'Основы алгоритмизации',
+    'Высшая математика',
+    'Основы философии',
+    'Операционные системы',
+    'Информ. технологии',
+  ];
 
-     expenses: [],
+  List<List<int>> grades = [
+    [4, 3, 5, 4, 3], // Шелудяков
+    [5, 5, 4, 5, 5], // Хрусталёв
+    [5, 5, 5, 5, 5], // Сушков
+    [4, 4, 5, 4, 4], // Синегрибов
+    [5, 4, 5, 5, 4], // Савченко
+    [3, 3, 3, 2, 3], // Потехин
+    [2, 3, 2, 3, 2], // Попов
+  ];
 
-     addExpense(title, amount, category) {
-          if (!title || Number.isNaN(amount) || amount <= 0) {
-               console.log("Ошибка ввода: проверьте, что сумма — это число больше 0, а название не пустое.");
-               return;
-          }
+  print('Сводная таблица\n');
 
-               const object = {
-                    id: Date.now(),
-                    title: title,
-                    amount: amount,
-                    category: category
-                    }
+  String header = 'Студент'.padRight(22);
+  for (int j = 0; j < predmets.length; j++) {
+    header += predmets[j].padRight(22);
+  }
+  header += 'Средний балл';
+  print(header);
+  print('-' * header.length);
 
-          this.expenses.push(object)
+  List<double> avg_predmets = [];
+  for (int j = 0; j < predmets.length; j++) {
+    List<int> column = [];
+    for (int i = 0; i < students.length; i++) {
+      column.add(grades[i][j]);
+    }
+    int sum = column.reduce((a, b) => a + b);
+    avg_predmets.add(sum / students.length);
+  }
 
-},
-     deleteExpense(id) {
+  List<double> avg_students = [];
+  for (int i = 0; i < students.length; i++) {
+    String row = students[i].padRight(22);
+    for (int j = 0; j < predmets.length; j++) {
+      row += grades[i][j].toString().padRight(22);
+    }
+    int sum = grades[i].reduce((a, b) => a + b);
+    double avg = sum / predmets.length;
+    avg_students.add(avg);
+    row += avg.toStringAsFixed(2);
+    print(row);
+  }
 
-          if (Number.isNaN(id)) {
-               console.log("Ошибка, повторите ввод.");
-               return;
-          }
+  String lastRow = 'Средний по предмету'.padRight(22);
+  for (int j = 0; j < predmets.length; j++) {
+    lastRow += avg_predmets[j].toStringAsFixed(2).padRight(22);
+  }
+  print('-' * header.length);
+  print(lastRow);
 
-          const index = this.expenses.findIndex((item) => item.id === id);
+  print('\nПоиск по фамилии\n');
+  String searchName = 'Савченко';
+  print('Ищем: $searchName');
 
-          if (index === -1) {
-               console.log(`Ошибка: Расход с ID ${id} не найден.`);
-               return;
-          }
+  int found_index = -1;
+  for (int i = 0; i < students.length; i++) {
+    if (students[i].contains(searchName)) {
+      found_index = i;
+      break;
+    }
+  }
 
-          this.expenses.splice(index, 1);
-          console.log(`Расход с id ${id} удален.`);
-     },
-     printCategoryStatistics() {
-          const stats = {};
+  if (found_index != -1) {
+    print('Найден: ${students[found_index]}');
+    print('Оценки:');
+    for (int j = 0; j < predmets.length; j++) {
+      print('  ${predmets[j]}: ${grades[found_index][j]}');
+    }
+    double avg = avg_students[found_index];
+    print('Средний балл: ${avg.toStringAsFixed(2)}');
+    String category = get_category(avg);
+    print('Категория: $category');
+  } else {
+    print('Студент не найден.');
+  }
 
-          this.expenses.forEach((stat) => {
-               if (stats[stat.category] === undefined) {
-                    stats[stat.category] = 0;
-               }
+  print('\nУникальные оценки в журнале\n');
+  Set<int> uniqueGradesSet = {};
+  for (var row in grades) {
+    uniqueGradesSet.addAll(row);
+  }
+  List<int> unique_grades = uniqueGradesSet.toList()..sort();
+  print('Уникальные оценки: $unique_grades');
 
-               stats[stat.category] += stat.amount;
-          });
+  print('\nМакс и мин оценки по предметам\n');
+  for (int j = 0; j < predmets.length; j++) {
+    int maxGrade = grades[0][j];
+    int minGrade = grades[0][j];
 
+    for (int i = 1; i < students.length; i++) {
+      if (grades[i][j] > maxGrade) maxGrade = grades[i][j];
+      if (grades[i][j] < minGrade) minGrade = grades[i][j];
+    }
 
-          console.log("Статистика по категориям");
-          for (const key in stats) {
-               console.log(`${key}: ${stats[key]}`);
-          }
-     },
+    List<String> maxStudents = [];
+    List<String> minStudents = [];
+    for (int i = 0; i < students.length; i++) {
+      if (grades[i][j] == maxGrade) maxStudents.add(students[i]);
+      if (grades[i][j] == minGrade) minStudents.add(students[i]);
+    }
 
+    print('${predmets[j]}:');
+    print('  Макс оценка: $maxGrade — ${maxStudents.join(", ")}');
+    print('  Мин оценка: $minGrade — ${minStudents.join(", ")}');
+  }
 
-     printAllExpenses() {
-          console.log("Список ваших расходов");
-          this.expenses.forEach((total) => {
-          console.log(`ID: ${total.id}, Название: ${total.title}, Сумма: ${total.amount}, Категория: ${total.category}`);
-     });
+  print('\nСтуденты с ровно одной двойкой\n');
+  for (int i = 0; i < students.length; i++) {
+    int countTwo = 0;
+    String predmets_two = '';
+    for (int j = 0; j < predmets.length; j++) {
+      if (grades[i][j] == 2) {
+        countTwo++;
+        predmets_two = predmets[j];
+      }
+    }
+    if (countTwo == 1) {
+      print('${students[i]} — двойка по: $predmets_two');
+    }
+  }
 
-     if (this.expenses.length === 0) {
-          console.log("Список пока пуст.");
-     }
-},
+  print('\nПредметы со средним выше общего\n');
 
+  double total_sum = 0;
+  for (int i = 0; i < students.length; i++) {
+    total_sum += grades[i].reduce((a, b) => a + b);
+  }
+  int count_total = students.length * predmets.length;
+  double overall_avg = total_sum / count_total;
+  print('Общий средний балл: ${overall_avg.toStringAsFixed(2)}');
+  print('Предметы выше общего среднего:');
 
-     getTotalAmount() {
-     let total = 0;
+  for (int j = 0; j < predmets.length; j++) {
+    if (avg_predmets[j] > overall_avg) {
+      print('  ${predmets[j]} — ${avg_predmets[j].toStringAsFixed(2)}');
+    }
+  }
 
-     for (let i = 0; i < this.expenses.length; i++) {
-          total = total + this.expenses[i].amount;
-     }
+  print('\nКоличество студентов по категориям\n');
 
-     console.log(`Общая сумма всех расходов: ${total}`);
-     return total
-},
+  List<String> excellent_list = [];
+  List<String> good_list = [];
+  List<String> other_list = [];
 
-     getExpensesByCategory(category) {
-          const list = this.expenses.filter((item) => {
-               return item.category === category;
-          });
-          let sum = 0;
-          list.forEach((item) => {
-               sum = sum + item.amount;
-          });
-          console.log(`На категорию ${category} вы потратили: ${sum}`);
-          return list;
-},
+  for (int i = 0; i < students.length; i++) {
+    double avg = avg_students[i];
+    if (avg >= 4.5) {
+      excellent_list.add(students[i]);
+    } else if (avg >= 3.5) {
+      good_list.add(students[i]);
+    } else {
+      other_list.add(students[i]);
+    }
+  }
 
-     findExpenseByTitle(title) {
-          if (!title) {
-               console.log("Ввод отменен или строка пуста.");
-               return;
-          }
-     const result = this.expenses.find((each) => {
-          return each.title && each.title.toLowerCase().includes(title.toLowerCase());
-     });
-
-
-          if (result) {
-               console.log("Найдено:", result);
-          } else {
-               console.log("Ничего не найдено.");
-          }
-          let stroka = prompt("Введите дополнительную строку или нажмите Отмена:");
-          if (stroka !== null && stroka.trim() !== "") {
-               this.expenses.push({ id: Date.now(), title: stroka, amount: 0, category: "Заметка" });
-               console.log("Заметка добавлена");
-          } else {
-               console.log("Добавление заметки отменено.");
-          }
-
-
-     return result
+  print('Отличники (${excellent_list.length}): ${excellent_list.join(", ")}');
+  print('Хорошисты (${good_list.length}): ${good_list.join(", ")}');
+  print('Остальные (${other_list.length}): ${other_list.join(", ")}');
 }
 
-
-
+String get_category(double avg) {
+  if (avg >= 4.5) {
+    return 'Отличник';
+  } else if (avg >= 3.5) {
+    return 'Хорошист';
+  } else {
+    return 'Остальные';
+  }
 }
-
-while (true) {
-     let message = `
-          1. Добавление расхода
-          2. Вывод всех расходов
-          3. Подсчёт общего баланса
-          4. Фильтрация по категории
-          5. Поиск расхода
-          6. Метод удаления расхода по id
-          7. Вывод статистики по категориям
-          8. Выход из программы
-          `;
-
-          console.log(message)
-          let choice = parseInt(prompt("Введите ваш выбор:"))
-          if (choice === 1) {
-               let title = prompt("Введите название расхода:");
-               let amount = parseFloat(prompt("Введите сумму:"));
-               let category = prompt("Введите категорию:");
-               expenseTracker.addExpense(title, amount, category)
-          }
-          else if (choice === 2) {
-
-               expenseTracker.printAllExpenses()
-          }
-          else if (choice === 3 ) {
-               expenseTracker.getTotalAmount()
-
-          }
-          else if (choice === 4) {
-               let category = prompt("Введите категорию для поиска:");
-               expenseTracker.getExpensesByCategory(category)
-
-          }
-          else if (choice === 5)
-          {
-               let title = prompt("Введите строку для поиска расхода:");
-               expenseTracker.findExpenseByTitle(title)
-
-          }
-          else if (choice === 6) {
-               let id = parseInt(prompt("Введите ID расхода для удаления:"));
-               expenseTracker.deleteExpense(id)
-
-          }
-          else if (choice === 7) {
-               expenseTracker.printCategoryStatistics()
-          }
-          else if (choice === 8) {
-               console.log("Удачи на дорогах");
-               break;
-          }
-          else {
-               console.log("Введите число от 1 до 8");
-          }
-
-
-}
-
-
