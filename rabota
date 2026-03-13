@@ -1,0 +1,70 @@
+// 1 задача
+String formatName(String firstName, String lastName, [String? middleName]) {
+  if (middleName != null) {
+    return '$lastName $firstName $middleName';
+  }
+  return '$lastName $firstName';
+}
+
+//2 задача
+double? calculate(double a, double b, String op) {
+  switch (op) {
+    case '+':
+      return a + b;
+    case '-':
+      return a - b;
+    case '*':
+      return a * b;
+    case '/':
+      return b == 0 ? null : a / b;
+    default:
+      return null;
+  }
+}
+
+// 3 задача
+void countSigns(List<int> numbers) {
+  int positive = 0, negative = 0, zero = 0;
+  for (var n in numbers) {
+    if (n > 0) positive++;
+    else if (n < 0) negative++;
+    else zero++;
+  }
+  print("Положительных: $positive");
+  print("Отрицательных: $negative");
+  print("Нулевых: $zero");
+}
+
+// 4 задача
+List<int> transformList(List<int> numbers, int Function(int) transform) {
+  List<int> result = [];
+  for (var n in numbers) {
+    result.add(transform(n));
+  }
+  return result;
+}
+
+// задача 5
+int sumDigits(int n) {
+  if (n < 10) return n;
+  return n % 10 + sumDigits(n ~/ 10);
+}
+
+void main() {
+  // Задача 1
+  print(formatName('Иван', 'Иванов'));
+  print(formatName('Иван', 'Иванов', 'Иванович'));
+
+  // Задача 2
+  print(calculate(10, 3, '+'));
+  print(calculate(10, 0, '/'));
+
+  // Задача 3
+  countSigns([1, -2, 0, 3, -5, 0]);
+
+  // Задача 4
+  print(transformList([1, 2, 3], (x) => x * 2));
+
+  // Задача 5
+  print(sumDigits(123));
+}
